@@ -280,18 +280,15 @@ class _MainScreenState extends State<MainScreen> {
     searchNearestOnlineDrivers();
   }
 
-  searchNearestOnlineDrivers() async{
-    if(onlineNearbyAvailableDriversList.length == 0){
-
-
-
+  searchNearestOnlineDrivers() async {
+    if (onlineNearbyAvailableDriversList.length == 0) {
       setState(() {
         markersSet.clear();
         circlesSet.clear();
       });
       Fluttertoast.showToast(msg: "No Driver Available, Restarting App Now");
 
-      Future.delayed(const Duration(milliseconds: 4000), (){
+      Future.delayed(const Duration(milliseconds: 4000), () {
         SystemNavigator.pop();
       });
 
@@ -299,8 +296,38 @@ class _MainScreenState extends State<MainScreen> {
     }
     await retrieveOnlineDriversInformation(onlineNearbyAvailableDriversList);
 
-    Navigator.push(context, MaterialPageRoute(builder: (c)=> SelectNearestActiveDriversScreen(referenceRideRequest: referenceRideRequest)));
+    var response = await Navigator.push(context, MaterialPageRoute(builder: (c) => SelectNearestActiveDriversScreen( referenceRideRequest: referenceRideRequest)));
+    if (response == "driverChoosed") {
+      FirebaseDatabase.instance.ref()
+          .child("drivers")
+          .child(chosenDriverId!)
+          .once()
+          .then((snap) {
+        if (snap.snapshot.value != null) {
+          // send notification to driver
+          sendNotificationToDriverNow(chosenDriverId!);
+        }
+        else {
+          Fluttertoast.showToast(msg: "This Driver is not Available");
+        }
+      });
+    }
   }
+  sendNotificationToDriverNow(String chosenDriverId){
+   //add request id to driver node
+    FirebaseDatabase.instance.ref()
+        .child("drivers")
+        .child(chosenDriverId!)
+        .child("newRideStatus")
+        .set(referenceRideRequest!.key);
+
+    //automate notification
+  }
+
+
+
+
+
 
   retrieveOnlineDriversInformation(List onlineNearestDriversList) async
   {

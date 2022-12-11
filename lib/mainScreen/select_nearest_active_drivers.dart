@@ -48,59 +48,67 @@ class _SelectNearestActiveDriversScreenState extends State<SelectNearestActiveDr
         itemCount: dList.length,
         itemBuilder: (BuildContext context, int index)
         {
-          return Card(
-            color: Colors.grey,
-            elevation: 3,
-            shadowColor: Colors.green,
-            margin: const EdgeInsets.all(8),
-            child: ListTile(
-              leading: Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: Image.asset(
-                  "images/" + dList[index]["car_details"]["type"].toString() + ".png",
-                  width: 70,
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                chosenDriverId = dList[index]["id"].toString();
+              });
+              Navigator.pop(context, "driverChoosed");
+            },
+            child: Card(
+              color: Colors.grey,
+              elevation: 3,
+              shadowColor: Colors.green,
+              margin: const EdgeInsets.all(8),
+              child: ListTile(
+                leading: Padding(
+                  padding: const EdgeInsets.only(top: 2.0),
+                  child: Image.asset(
+                    "images/" + dList[index]["car_details"]["type"].toString() + ".png",
+                    width: 70,
+                  ),
                 ),
-              ),
-              title: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    dList[index]["name"],
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black54,
+                title: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      dList[index]["name"],
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                      ),
                     ),
-                  ),
-                  Text(
-                    dList[index]["car_details"]["Number_Plate"],
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.white54,
+                    Text(
+                      dList[index]["car_details"]["Number_Plate"],
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white54,
+                      ),
                     ),
-                  ),
-                  SmoothStarRating(
-                    rating: 3.5,
-                    color: Colors.black,
-                    borderColor: Colors.black,
-                    allowHalfRating: true,
-                    starCount: 5,
-                    size: 15,
-                  ),
-                ],
-              ),
-              trailing: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    AssistantMethods.calculateAmount().toString(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                    SmoothStarRating(
+                      rating: 3.5,
+                      color: Colors.black,
+                      borderColor: Colors.black,
+                      allowHalfRating: true,
+                      starCount: 5,
+                      size: 15,
                     ),
-                  ),
+                  ],
+                ),
+                trailing: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      AssistantMethods.calculateAmount().toString(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
 
 
 
-                ],
+                  ],
+                ),
               ),
             ),
           );
