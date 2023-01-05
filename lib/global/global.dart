@@ -12,3 +12,4 @@ String userDropOffAddress = "";
 String driverCarDetails = "";
 String driverPhone = "";
 String driverName = "";
+double? petrolPrice;

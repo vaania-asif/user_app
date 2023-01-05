@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:user_app/authentication/carinfo_screen.dart';
 import 'package:user_app/authentication/login_screen.dart';
 import 'package:user_app/mainScreen/main_screen.dart';
 import 'package:user_app/widgets/progress_dialog.dart';
@@ -73,7 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Account has been created");
-      Navigator.push(context, MaterialPageRoute(builder: (c)=> MainScreen()));
+      Navigator.push(context, MaterialPageRoute(builder: (c)=> CarInfoScreen()));
     }
     else {
       Navigator.pop(context);

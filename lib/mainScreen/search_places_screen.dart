@@ -28,10 +28,11 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen>
 
       var responseAutoCompleteSearch = await RequestAssistant.recieveRequest(urlAutoCompleteSearch);
 
-      if(responseAutoCompleteSearch == "Error Occurred, Failed. No Response.")
+      if(responseAutoCompleteSearch == "Error Occurred")
       {
         return;
       }
+      print(responseAutoCompleteSearch);
 
       if(responseAutoCompleteSearch["status"] == "OK")
       {

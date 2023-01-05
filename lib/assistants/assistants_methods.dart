@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
@@ -20,16 +19,16 @@ class AssistantMethods
 
     var requestResponse = await RequestAssistant.recieveRequest(apiUrl);
 
-    if(requestResponse != "Error Occurred, Failed. No Response.")
+    if(requestResponse != "Error Occurred")
     {
       humanReadableAddress = requestResponse["results"][0]["formatted_address"];
 
-      Directions userPickUpAddress = Directions();
-      userPickUpAddress.locationLatitude = position.latitude;
-      userPickUpAddress.locationLongitude = position.longitude;
-      userPickUpAddress.locationName = humanReadableAddress;
+      Directions userDropoffAddress = Directions();
+      userDropoffAddress.locationLatitude = position.latitude;
+      userDropoffAddress.locationLongitude = position.longitude;
+      userDropoffAddress.locationName = humanReadableAddress;
 
-      Provider.of<AppInfo>(context, listen: false).updateDropoffLocationAddress(userPickUpAddress);
+      Provider.of<AppInfo>(context, listen: false).updateDropoffLocationAddress(userDropoffAddress);
     }
 
     return humanReadableAddress;
@@ -53,10 +52,16 @@ class AssistantMethods
     });
   }
 
-  static double calculateAmount(){
-    double petrolPricePerLiter = 224.40;
+  static Future<double> calculateAmount() async {
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child('price').get();
+    if (snapshot.exists) {
+      petrolPrice = snapshot.value as double?;
+    }
+    DatabaseReference price = FirebaseDatabase.instance.ref().child("price");
+
     double LitersRefuelled = 6;
-    double totalAmount = petrolPricePerLiter*LitersRefuelled;
+    double totalAmount = petrolPrice! * LitersRefuelled;
 
     return double.parse(totalAmount.toStringAsFixed(1));
   }

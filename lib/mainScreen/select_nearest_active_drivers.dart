@@ -61,13 +61,7 @@ class _SelectNearestActiveDriversScreenState extends State<SelectNearestActiveDr
               shadowColor: Colors.green,
               margin: const EdgeInsets.all(8),
               child: ListTile(
-                leading: Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
-                  child: Image.asset(
-                    "images/" + dList[index]["car_details"]["type"].toString() + ".png",
-                    width: 70,
-                  ),
-                ),
+
                 title: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

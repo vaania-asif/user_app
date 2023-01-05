@@ -234,20 +234,15 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   locateUserPosition() async {
-    Position cPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    Position cPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     userCurrentPosition = cPosition;
 
-    LatLng latLngPosition =
-        LatLng(userCurrentPosition!.latitude, userCurrentPosition!.longitude);
+    LatLng latLngPosition = LatLng(userCurrentPosition!.latitude, userCurrentPosition!.longitude);
 
-    CameraPosition cameraPosition =
-        CameraPosition(target: latLngPosition, zoom: 14);
-    newGoogleMapController!
-        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    CameraPosition cameraPosition = CameraPosition(target: latLngPosition, zoom: 14);
+    newGoogleMapController!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
     String humanReadableAddress = await AssistantMethods.searchAddressForGeographicCoOrdinates(userCurrentPosition!, context);
-    print("this is your address= ");
 
     userName = userModelCurrentInfo!.name!;
     userEmail = userModelCurrentInfo!.email!;
@@ -259,6 +254,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     checkIfLocationPermissionAllowed();
+    AssistantMethods.readCurrentOnlineUserInfo();
   }
 
   saveRideRequestInformation(){
@@ -442,6 +438,7 @@ class _MainScreenState extends State<MainScreen> {
 
     });
   }
+
   sendNotificationToDriverNow(String chosenDriverId){
    //add request id to driver node
     FirebaseDatabase.instance.ref()
@@ -471,11 +468,6 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-
-
-
-
-
   retrieveOnlineDriversInformation(List onlineNearestDriversList) async
   {
     DatabaseReference ref = FirebaseDatabase.instance.ref().child("drivers");
@@ -490,6 +482,7 @@ class _MainScreenState extends State<MainScreen> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
 
@@ -606,9 +599,9 @@ class _MainScreenState extends State<MainScreen> {
                                   ),
                                   Text(
                                     Provider.of<AppInfo>(context).userDropoffLocation != null
-                                        ? Provider.of<AppInfo>(context)
+                                        ? (Provider.of<AppInfo>(context)
                                             .userDropoffLocation!
-                                            .locationName!
+                                            .locationName!).substring(0,20) + "..."
                                         : "User Drop Off Location",
                                     style: const TextStyle(
                                         color: Colors.grey, fontSize: 14),
@@ -634,7 +627,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
 
                         ElevatedButton(
-                          child: const Text("Request a Ride",),
+                          child: const Text("Next",),
 
                           onPressed: () {
                             if (Provider.of<AppInfo>(context, listen: false ).userDropoffLocation != null){
